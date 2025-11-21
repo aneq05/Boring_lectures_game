@@ -8,6 +8,7 @@ import logging
 from typing import Optional
 
 from src.board.board import Board
+from src.board.grind_renderer import GridRenderer
 from src.cell.cell_setup import Cell, CellState
 from src.config import GameSettings, GameConfig
 from src.utils.colors import ThemeColors, BasicColors, UIColors
@@ -51,6 +52,9 @@ class Game:
         self.board = Board(self.settings.size)
         self.selected_cell: Optional[Cell] = None
         self.running = True
+
+        # Inicjalizacja renderera siatki
+        self.grid_renderer = GridRenderer()
 
         self.load_icons()
 
@@ -125,16 +129,16 @@ class Game:
     def _setup_example_board(self):
         """Ustawia przykładową planszę do testowania."""
         # Dodaj kilka stałych komórek jako przykład
-        self.board.cells[0][0].state = CellState.SUN
+        self.board.cells[0][0].state = CellState.STATE_A
         self.board.cells[0][0].is_fixed = True
 
-        self.board.cells[1][1].state = CellState.MOON
+        self.board.cells[1][1].state = CellState.STATE_B
         self.board.cells[1][1].is_fixed = True
 
-        self.board.cells[2][2].state = CellState.SUN
+        self.board.cells[2][2].state = CellState.STATE_A
         self.board.cells[2][2].is_fixed = True
 
-        self.board.cells[3][3].state = CellState.MOON
+        self.board.cells[3][3].state = CellState.STATE_B
         self.board.cells[3][3].is_fixed = True
 
     def handle_events(self):
@@ -174,62 +178,26 @@ class Game:
 
         # Instrukcje
         instruction = self.small_font.render(
-            "Kliknij komórkę: pusty → ☀ → 🌙 → pusty",
+            "Kliknij komórkę: pusty → A → B → pusty",
             True,
             BasicColors.DARK_GRAY.value
         )
         inst_rect = instruction.get_rect(center=(self.settings.window_width // 2, 80))
         self.screen.blit(instruction, inst_rect)
 
-        # Rysuj siatkę
-        self._draw_grid()
+        # Rysuj siatkę używając GridRenderer
+        self.grid_renderer.render_grid(
+            screen=self.screen,
+            board=self.board,
+            settings=self.settings,
+            icon1=self.icon1,
+            icon2=self.icon2
+        )
 
         # Rysuj zasady na dole
         self._draw_rules()
 
         pygame.display.flip()
-
-    def _draw_grid(self):
-        """Rysuje siatkę planszy z komórkami."""
-        for row in range(self.board.size):
-            for col in range(self.board.size):
-                cell = self.board.cells[row][col]
-                x = self.settings.grid_offset_x + col * self.settings.cell_size
-                y = self.settings.grid_offset_y + row * self.settings.cell_size
-
-                # Tło komórki
-                bg_color = UIColors.FIXED_CELL_COLOR.value if cell.is_fixed else UIColors.BACKGROUND.value
-                pygame.draw.rect(
-                    self.screen,
-                    bg_color,
-                    (x, y, self.settings.cell_size, self.settings.cell_size)
-                )
-
-                # Obramowanie - czerwone jeśli błąd
-                border_color = UIColors.BORDER_COLOR.value
-                border_width = 2
-
-                if not self.board.check_three_consecutive(row, col):
-                    border_color = UIColors.ERROR_COLOR.value
-                    border_width = 3
-
-                pygame.draw.rect(
-                    self.screen,
-                    border_color,
-                    (x, y, self.settings.cell_size, self.settings.cell_size),
-                    border_width
-                )
-
-                # Rysuj ikony
-                if cell.state == CellState.SUN:
-                    icon_x = x + (self.settings.cell_size - self.icon1.get_width()) // 2
-                    icon_y = y + (self.settings.cell_size - self.icon1.get_height()) // 2
-                    self.screen.blit(self.icon1, (icon_x, icon_y))
-
-                elif cell.state == CellState.MOON:
-                    icon_x = x + (self.settings.cell_size - self.icon2.get_width()) // 2
-                    icon_y = y + (self.settings.cell_size - self.icon2.get_height()) // 2
-                    self.screen.blit(self.icon2, (icon_x, icon_y))
 
     def _draw_rules(self):
         """Rysuje zasady gry na dole ekranu."""
@@ -237,7 +205,7 @@ class Game:
 
         rules = [
             "Zasady:",
-            "• Równa liczba ☀ i 🌙 w wierszach i kolumnach",
+            "• Równa liczba symboli A i B w wierszach i kolumnach",
             "• Nie może być 3 takich samych obok siebie",
             "",
             "Skróty: R - reset, ESC - wyjście"

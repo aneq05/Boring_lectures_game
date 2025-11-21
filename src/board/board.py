@@ -160,8 +160,8 @@ class Board:
         result = f"Board({self.size}x{self.size}):\n"
         for row in self.cells:
             result += " ".join(
-                "☀" if c.state == CellState.SUN
-                else "🌙" if c.state == CellState.MOON
+                "A" if c.state == CellState.STATE_A
+                else "B" if c.state == CellState.STATE_B
                 else "·"
                 for c in row
             ) + "\n"

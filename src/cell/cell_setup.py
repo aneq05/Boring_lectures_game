@@ -7,8 +7,8 @@ from enum import Enum
 class CellState(Enum):
     """Stany komórki na planszy"""
     EMPTY = 0
-    SUN = 1      # ☀️
-    MOON = 2     # 🌙
+    STATE_A = 1      # Pierwszy symbol (sun/cat/circle/apple)
+    STATE_B = 2      # Drugi symbol (moon/dog/square/orange)
 
 
 class Cell:
@@ -18,7 +18,7 @@ class Cell:
     Attributes:
         row (int): Numer wiersza komórki
         col (int): Numer kolumny komórki
-        state (CellState): Aktualny stan komórki (EMPTY, SUN, MOON)
+        state (CellState): Aktualny stan komórki (EMPTY, STATE_A, STATE_B)
         is_fixed (bool): Czy komórka jest ustalona (nie można zmienić)
     """
 
@@ -30,14 +30,14 @@ class Cell:
 
     def toggle(self):
         """
-        Przełącza stan komórki: EMPTY -> SUN -> MOON -> EMPTY
+        Przełącza stan komórki: EMPTY -> STATE_A -> STATE_B -> EMPTY
         Działa tylko jeśli komórka nie jest ustalona (is_fixed=False)
         """
         if not self.is_fixed:
             if self.state == CellState.EMPTY:
-                self.state = CellState.SUN
-            elif self.state == CellState.SUN:
-                self.state = CellState.MOON
+                self.state = CellState.STATE_A
+            elif self.state == CellState.STATE_A:
+                self.state = CellState.STATE_B
             else:
                 self.state = CellState.EMPTY
 

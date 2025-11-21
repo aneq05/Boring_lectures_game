@@ -101,8 +101,8 @@ class Validator:
 
         # Sprawdź wiersze
         for r in rows_to_check:
-            sun_count = board.count_in_row(r, CellState.SUN)
-            moon_count = board.count_in_row(r, CellState.MOON)
+            sun_count = board.count_in_row(r, CellState.STATE_A)
+            moon_count = board.count_in_row(r, CellState.STATE_B)
             empty_count = board.count_in_row(r, CellState.EMPTY)
 
             # Maksymalna dozwolona liczba to połowa rozmiaru
@@ -118,8 +118,8 @@ class Validator:
 
         # Sprawdź kolumny
         for c in cols_to_check:
-            sun_count = board.count_in_col(c, CellState.SUN)
-            moon_count = board.count_in_col(c, CellState.MOON)
+            sun_count = board.count_in_col(c, CellState.STATE_A)
+            moon_count = board.count_in_col(c, CellState.STATE_B)
             empty_count = board.count_in_col(c, CellState.EMPTY)
 
             max_allowed = board.size // 2
@@ -268,42 +268,42 @@ class Validator:
 
         # Sprawdź balans w wierszach
         for row in range(board.size):
-            sun_count = board.count_in_row(row, CellState.SUN)
-            moon_count = board.count_in_row(row, CellState.MOON)
+            sun_count = board.count_in_row(row, CellState.STATE_A)
+            moon_count = board.count_in_row(row, CellState.STATE_B)
             max_allowed = board.size // 2
 
             if sun_count > max_allowed:
                 errors.append(ValidationError(
                     "TOO_MANY_SUNS_ROW",
-                    f"Za dużo słońc w wierszu {row} ({sun_count}/{max_allowed})",
-                    [(row, c) for c in range(board.size) if board.cells[row][c].state == CellState.SUN]
+                    f"Za dużo symboli A w wierszu {row} ({sun_count}/{max_allowed})",
+                    [(row, c) for c in range(board.size) if board.cells[row][c].state == CellState.STATE_A]
                 ))
 
             if moon_count > max_allowed:
                 errors.append(ValidationError(
                     "TOO_MANY_MOONS_ROW",
-                    f"Za dużo księżyców w wierszu {row} ({moon_count}/{max_allowed})",
-                    [(row, c) for c in range(board.size) if board.cells[row][c].state == CellState.MOON]
+                    f"Za dużo symboli B w wierszu {row} ({moon_count}/{max_allowed})",
+                    [(row, c) for c in range(board.size) if board.cells[row][c].state == CellState.STATE_B]
                 ))
 
         # Sprawdź balans w kolumnach
         for col in range(board.size):
-            sun_count = board.count_in_col(col, CellState.SUN)
-            moon_count = board.count_in_col(col, CellState.MOON)
+            sun_count = board.count_in_col(col, CellState.STATE_A)
+            moon_count = board.count_in_col(col, CellState.STATE_B)
             max_allowed = board.size // 2
 
             if sun_count > max_allowed:
                 errors.append(ValidationError(
                     "TOO_MANY_SUNS_COL",
-                    f"Za dużo słońc w kolumnie {col} ({sun_count}/{max_allowed})",
-                    [(r, col) for r in range(board.size) if board.cells[r][col].state == CellState.SUN]
+                    f"Za dużo symboli A w kolumnie {col} ({sun_count}/{max_allowed})",
+                    [(r, col) for r in range(board.size) if board.cells[r][col].state == CellState.STATE_A]
                 ))
 
             if moon_count > max_allowed:
                 errors.append(ValidationError(
                     "TOO_MANY_MOONS_COL",
-                    f"Za dużo księżyców w kolumnie {col} ({moon_count}/{max_allowed})",
-                    [(r, col) for r in range(board.size) if board.cells[r][col].state == CellState.MOON]
+                    f"Za dużo symboli B w kolumnie {col} ({moon_count}/{max_allowed})",
+                    [(r, col) for r in range(board.size) if board.cells[r][col].state == CellState.STATE_B]
                 ))
 
         # Sprawdź duplikaty wierszy
