@@ -1,0 +1,20 @@
+TO DO:
+- główna plansza (do wyboru różne motywy),
+- dobrze widoczne ikonki na planszy,
+- różne zwierzaki do wyboru,
+- na boku planszy widoczna ilość liczbowa ikonek danego rodzaju,
+- zegar mierzący czas,
+- podpowiedzi,
+- sprawdzanie ustawienia na planszy,
+- reset,
+- cofanie ostatniego ruchu,
+- ruch do przodu (jak cofniemy to aby wrócić)
+- punkciki,
+- statystyki,
+- opis zasad gry,
+- dodatkowe efekty dźwiękowe/wizualne,
+- daily challenge (coś ja wordle)
+- poziomy trudności,
+- rozmiar planszy do wyboru,
+- random seed (tak aby użytkownik mógł sam to podać),
+- hints
