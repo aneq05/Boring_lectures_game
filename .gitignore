@@ -3,3 +3,6 @@ __pycache__/
 .idea/
 .pytest_cache/
 let_me_tango.egg-info/
+build/
+*.log
+*_LOCAL.md

@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 import os
-import sys
 
 import pygame
 
@@ -332,4 +331,3 @@ class Game:
             self.clock.tick(self.settings.fps)
 
         pygame.quit()
-        sys.exit()
