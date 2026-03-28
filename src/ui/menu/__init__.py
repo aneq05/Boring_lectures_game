@@ -1,7 +1,5 @@
-"""
-Menu package - system menu z wyborem opcji gry
-"""
+"""Menu package."""
+
 from .main_menu import MainMenu
 
-__all__ = ['MainMenu']
-
+__all__ = ["MainMenu"]

@@ -1,6 +1,5 @@
-"""Cell module - reprezentacja komórek planszy"""
+"""Cell domain models."""
 
 from .cell_setup import Cell, CellState
 
-__all__ = ['Cell', 'CellState']
-
+__all__ = ["Cell", "CellState"]

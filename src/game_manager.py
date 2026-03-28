@@ -1,6 +1,3 @@
-"""
-Game Manager - glowna logika gry i petla zdarzen.
-"""
 from __future__ import annotations
 
 import logging
@@ -24,13 +21,9 @@ from src.utils.timer import GameTimer
 
 
 class Game:
-    """Glowna klasa zarzadzajaca rozgrywka."""
-
     def __init__(self, settings: GameSettings):
         self.settings = settings
-        self.screen = pygame.display.set_mode(
-            (self.settings.window_width, self.settings.window_height)
-        )
+        self.screen = pygame.display.set_mode((self.settings.window_width, self.settings.window_height))
         pygame.display.set_caption("Let Me Tango")
 
         self.clock = pygame.time.Clock()
@@ -43,7 +36,7 @@ class Game:
         self.move_count = 0
         self.hints_used = 0
         self.hints_remaining = self.settings.hints_available
-        self.status_message = "Generowanie planszy..."
+        self.status_message = "Generating board..."
         self.status_kind = "info"
         self.is_won = False
         self.transition_alpha = 0
@@ -60,14 +53,12 @@ class Game:
         self.start_new_game()
 
     def load_icons(self):
-        """Laduje ikony wedlug wybranego motywu."""
         theme_info = GameConfig.THEME_SETTINGS[self.settings.theme]
         icon_path = os.path.join("assets", "images", "icons")
 
         try:
             icon1_path = os.path.join(icon_path, theme_info["icon1"])
             icon2_path = os.path.join(icon_path, theme_info["icon2"])
-
             icon1 = pygame.image.load(icon1_path)
             icon2 = pygame.image.load(icon2_path)
 
@@ -81,7 +72,6 @@ class Game:
             self.icons[CellState.MOON] = self._create_fallback_icon(icon_size, theme_info["icon2_fallback"])
 
     def _create_fallback_icon(self, size: int, fallback_type: str) -> pygame.Surface:
-        """Tworzy prosta ikone awaryjna."""
         surface = pygame.Surface((size, size), pygame.SRCALPHA)
         fallback_colors = {
             "yellow_circle": ThemeColors.YELLOW.value,
@@ -103,7 +93,6 @@ class Game:
         return surface
 
     def start_new_game(self):
-        """Tworzy nowy puzzle na podstawie ustawien z menu."""
         generator = BoardGenerator(self.settings.size)
         generated = generator.generate(remove_ratio=self.settings.remove_percent)
         self.board = generated.puzzle
@@ -118,12 +107,11 @@ class Game:
         self.is_won = False
         self.win_popup = None
         self.timer.start()
-        self._set_status("Nowa plansza gotowa. Powodzenia!", "info")
+        self._set_status("New puzzle is ready. Have fun!", "info")
         self.transition_alpha = 235
         self._sync_toolbar_state()
 
     def handle_events(self):
-        """Obsluguje wszystkie zdarzenia gry."""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
@@ -141,7 +129,6 @@ class Game:
                     self.settings.grid_offset_y,
                     self.settings.cell_size,
                 )
-
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if self.is_won:
                     continue
@@ -149,7 +136,6 @@ class Game:
                     self._handle_board_click(event.pos, cycle_forward=True)
                 elif event.button == 3:
                     self._handle_board_click(event.pos, cycle_forward=False)
-
             elif event.type == pygame.KEYDOWN:
                 self._handle_keyboard(event)
 
@@ -162,9 +148,10 @@ class Game:
         )
         if not cell:
             return
+
         self.selected_cell = cell
         if cell.is_fixed:
-            self._set_status("To pole jest stale i nie mozna go zmienic.", "error")
+            self._set_status("This is a fixed cell and cannot be changed.", "error")
             return
 
         old_state = cell.state
@@ -180,7 +167,6 @@ class Game:
     def _get_next_state(self, state: CellState, cycle_forward: bool) -> CellState:
         if not cycle_forward:
             return CellState.EMPTY
-
         sequence = [CellState.EMPTY, CellState.SUN, CellState.MOON]
         index = sequence.index(state)
         return sequence[(index + 1) % len(sequence)]
@@ -216,10 +202,9 @@ class Game:
             self.start_new_game()
 
     def undo(self):
-        """Cofa ostatni ruch."""
         move = self.history.pop_undo()
         if not move:
-            self._set_status("Brak ruchow do cofniecia.", "info")
+            self._set_status("No moves to undo.", "info")
             return
 
         cell = self.board.get_cell(move.row, move.col)
@@ -227,14 +212,13 @@ class Game:
         self.move_count = max(0, self.move_count - 1)
         self.is_won = False
         self.win_popup = None
-        self._set_status("Cofnieto ostatni ruch.", "info")
+        self._set_status("Last move was undone.", "info")
         self._sync_toolbar_state()
 
     def redo(self):
-        """Ponawia cofnięty ruch."""
         move = self.history.pop_redo()
         if not move:
-            self._set_status("Brak ruchow do ponowienia.", "info")
+            self._set_status("No moves to redo.", "info")
             return
 
         cell = self.board.get_cell(move.row, move.col)
@@ -243,7 +227,6 @@ class Game:
         self._evaluate_board_after_move()
 
     def reset_board(self):
-        """Przywraca plansze do stanu poczatkowego."""
         self.board.fill_from(self.initial_board)
         self.history.clear()
         self.move_count = 0
@@ -252,17 +235,17 @@ class Game:
         self.is_won = False
         self.win_popup = None
         self.timer.start()
-        self._set_status("Plansza zostala zresetowana.", "info")
+        self._set_status("Board was reset to the initial state.", "info")
         self._sync_toolbar_state()
 
     def use_hint(self):
-        """Uzupelnia jedno pole zgodnie z rozwiazaniem."""
         if self.hints_remaining <= 0:
-            self._set_status("Nie masz juz podpowiedzi.", "error")
+            self._set_status("No hints left.", "error")
             return
+
         hint = self.solver.next_hint(self.board, self.solution_board)
         if not hint:
-            self._set_status("Nie ma juz sensownej podpowiedzi do pokazania.", "info")
+            self._set_status("No useful hint available for this board state.", "info")
             return
 
         cell = self.board.get_cell(hint.row, hint.col)
@@ -272,27 +255,26 @@ class Game:
         self.move_count += 1
         self.hints_remaining -= 1
         self.hints_used += 1
-        self._set_status(f"Podpowiedz: wiersz {hint.row + 1}, kolumna {hint.col + 1}.", "info")
+        self._set_status(f"Hint: row {hint.row + 1}, column {hint.col + 1}.", "info")
         self._evaluate_board_after_move()
 
     def check_board(self):
-        """Sprawdza aktualny stan planszy."""
         if Validator.is_board_valid(self.board):
             if self.board.is_complete():
                 self._handle_win()
             else:
-                self._set_status("Plansza jest na razie poprawna. Mozesz grac dalej.", "success")
+                self._set_status("Board is valid so far. Keep going!", "success")
         else:
             errors = Validator.get_errors(self.board)
-            message = errors[0].message if errors else "Plansza lamie jedna z zasad."
+            message = errors[0].message if errors else "Board violates at least one rule."
             self._set_status(message, "error")
         self._sync_toolbar_state()
 
     def _evaluate_board_after_move(self):
         if not Validator.is_board_valid(self.board):
-            self._set_status("Na planszy pojawil sie konflikt. Sprawdz czerwone pola.", "error")
+            self._set_status("A rule conflict was detected. Check highlighted cells.", "error")
         else:
-            self._set_status("Ruch zapisany.", "info")
+            self._set_status("Move saved.", "info")
 
         if self.board.is_complete() and Validator.is_board_valid(self.board):
             self._handle_win()
@@ -310,7 +292,7 @@ class Game:
             move_count=self.move_count,
             hints_used=self.hints_used,
         )
-        self._set_status("Plansza rozwiazana perfekcyjnie. Gratulacje!", "success")
+        self._set_status("Puzzle solved. Great job!", "success")
         self._sync_toolbar_state()
 
     def _set_status(self, message: str, kind: str):
@@ -325,7 +307,6 @@ class Game:
         self.toolbar.set_button_enabled("reset", not self.is_won)
 
     def draw(self):
-        """Renderuje wszystkie elementy gry."""
         if self.transition_alpha > 0:
             self.transition_alpha = max(0, self.transition_alpha - 14)
 
@@ -345,7 +326,6 @@ class Game:
         )
 
     def run_game(self):
-        """Glowna petla gry."""
         while self.running:
             self.handle_events()
             self.draw()

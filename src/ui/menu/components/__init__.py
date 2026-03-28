@@ -1,10 +1,8 @@
-"""
-Components package - eksport wszystkich komponentów UI
-"""
+"""Reusable menu UI components."""
+
 from .button import Button
-from .selector import Selector
-from .label import Label
 from .info_box import InfoBox
+from .label import Label
+from .selector import Selector
 
-__all__ = ['Button', 'Selector', 'Label', 'InfoBox']
-
+__all__ = ["Button", "Selector", "Label", "InfoBox"]

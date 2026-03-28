@@ -1,6 +1,3 @@
-"""
-Generator plansz i puzzli.
-"""
 from __future__ import annotations
 
 import random
@@ -14,28 +11,22 @@ from src.core.validator import Validator
 
 @dataclass
 class GeneratedPuzzle:
-    """Komplet danych potrzebnych do rozpoczecia rozgrywki."""
-
     puzzle: Board
     solution: Board
 
 
 class BoardGenerator:
-    """Generuje poprawne plansze oraz puzzle z pojedynczym rozwiazaniem."""
-
     def __init__(self, size: int = 6, seed: int | None = None):
         self.size = size
         self.random = random.Random(seed)
         self.solver = BoardSolver()
 
     def generate(self, remove_ratio: float) -> GeneratedPuzzle:
-        """Buduje rozwiazanie i zamienia je w grywalny puzzle."""
         solution = self.generate_solved_board()
         puzzle = self.create_puzzle(solution, remove_ratio)
         return GeneratedPuzzle(puzzle=puzzle, solution=solution)
 
     def generate_solved_board(self) -> Board:
-        """Generuje poprawnie wypelniona plansze."""
         board = Board(self.size)
 
         def backtrack() -> bool:
@@ -57,12 +48,11 @@ class BoardGenerator:
             return False
 
         if not backtrack():
-            raise RuntimeError("Nie udalo sie wygenerowac poprawnej planszy.")
+            raise RuntimeError("Failed to generate a valid solved board.")
 
         return board
 
     def create_puzzle(self, solution: Board, remove_ratio: float) -> Board:
-        """Usuwa komorki z rozwiazania, zachowujac pojedyncze rozwiazanie."""
         puzzle = solution.clone()
         for row, col in puzzle.iter_positions():
             puzzle.cells[row][col].is_fixed = True

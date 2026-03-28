@@ -1,6 +1,5 @@
-"""Core module - logika biznesowa gry"""
+"""Core game logic."""
 
-from .validator import Validator, ValidationError
+from .validator import ValidationError, Validator
 
-__all__ = ['Validator', 'ValidationError']
-
+__all__ = ["Validator", "ValidationError"]

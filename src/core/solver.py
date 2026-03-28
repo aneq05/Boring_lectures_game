@@ -1,6 +1,3 @@
-"""
-Solver i narzedzia do analizowania planszy Tango.
-"""
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -13,8 +10,6 @@ from src.core.validator import Validator
 
 @dataclass(frozen=True)
 class Hint:
-    """Podpowiedz dla gracza oparta o znane rozwiazanie."""
-
     row: int
     col: int
     state: CellState
@@ -22,19 +17,14 @@ class Hint:
 
 
 class BoardSolver:
-    """Rozwiazuje plansze i liczy liczbe rozwiazan."""
-
     def solve(self, board: Board) -> Optional[Board]:
-        """Zwraca pierwsze znalezione rozwiazanie albo None."""
         solutions = self._search(board.clone(), solution_limit=1)
         return solutions[0] if solutions else None
 
     def count_solutions(self, board: Board, limit: int = 2) -> int:
-        """Liczy rozwiazania do wskazanego limitu."""
         return len(self._search(board.clone(), solution_limit=limit))
 
     def next_hint(self, board: Board, solution: Board) -> Optional[Hint]:
-        """Zwraca pierwsza niezgodna z rozwiazaniem komorke."""
         for row, col in board.iter_positions():
             current = board.cells[row][col]
             solved = solution.cells[row][col]
@@ -45,7 +35,7 @@ class BoardSolver:
                     row=row,
                     col=col,
                     state=solved.state,
-                    reason="To pole powinno miec przeciwny symbol lub zostac uzupelnione.",
+                    reason="This cell should match the solved board state.",
                 )
         return None
 

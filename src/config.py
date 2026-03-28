@@ -1,6 +1,3 @@
-"""
-Konfiguracja gry - poziomy trudnosci, rozmiary planszy i motywy.
-"""
 from enum import Enum
 from typing import Dict
 
@@ -27,33 +24,31 @@ class Theme(Enum):
 
 
 class GameConfig:
-    """Globalna konfiguracja dostepnych opcji gry."""
-
     DIFFICULTY_SETTINGS: Dict[Difficulty, Dict] = {
         Difficulty.EASY: {
-            "name": "Latwy",
-            "description": "40% komorek do wypelnienia",
+            "name": "Easy",
+            "description": "40% of the board to fill",
             "remove_percent": 0.40,
             "hints_available": 5,
             "color": (100, 255, 100),
         },
         Difficulty.MEDIUM: {
-            "name": "Sredni",
-            "description": "55% komorek do wypelnienia",
+            "name": "Medium",
+            "description": "55% of the board to fill",
             "remove_percent": 0.55,
             "hints_available": 3,
             "color": (255, 215, 0),
         },
         Difficulty.HARD: {
-            "name": "Trudny",
-            "description": "70% komorek do wypelnienia",
+            "name": "Hard",
+            "description": "70% of the board to fill",
             "remove_percent": 0.70,
             "hints_available": 2,
             "color": (255, 140, 0),
         },
         Difficulty.EXPERT: {
-            "name": "Ekspert",
-            "description": "75%+ komorek do wypelnienia",
+            "name": "Expert",
+            "description": "75%+ of the board to fill",
             "remove_percent": 0.75,
             "hints_available": 1,
             "color": (255, 69, 0),
@@ -62,63 +57,63 @@ class GameConfig:
 
     BOARD_SIZE_SETTINGS: Dict[BoardSize, Dict] = {
         BoardSize.SMALL: {
-            "name": "Mala (4x4)",
+            "name": "Small (4x4)",
             "size": 4,
             "cell_size": 100,
-            "description": "Idealna na szybka gre",
+            "description": "Perfect for a quick round",
         },
         BoardSize.MEDIUM: {
-            "name": "Srednia (6x6)",
+            "name": "Medium (6x6)",
             "size": 6,
             "cell_size": 78,
-            "description": "Najbardziej klasyczny wariant",
+            "description": "Balanced classic mode",
         },
         BoardSize.LARGE: {
-            "name": "Duza (8x8)",
+            "name": "Large (8x8)",
             "size": 8,
             "cell_size": 62,
-            "description": "Wiecej analizy i mniej oczywistych ruchow",
+            "description": "More strategy and planning",
         },
         BoardSize.XLARGE: {
-            "name": "Bardzo duza (10x10)",
+            "name": "XL (10x10)",
             "size": 10,
             "cell_size": 50,
-            "description": "Tryb dla cierpliwych strategow",
+            "description": "For deep puzzle sessions",
         },
     }
 
     THEME_SETTINGS: Dict[Theme, Dict] = {
         Theme.SUN_MOON: {
-            "name": "Slonce i Ksiezyc",
+            "name": "Sun & Moon",
             "icon1": "sun.png",
             "icon2": "moon.png",
             "icon1_fallback": "yellow_circle",
             "icon2_fallback": "blue_circle",
-            "description": "Klasyczny motyw",
+            "description": "Classic icon pair",
         },
         Theme.CAT_DOG: {
-            "name": "Kot i Pies",
+            "name": "Cat & Dog",
             "icon1": "cat.png",
             "icon2": "dog.png",
             "icon1_fallback": "brown_circle",
             "icon2_fallback": "gray_circle",
-            "description": "Zwierzaki na planszy",
+            "description": "Friendly pet icons",
         },
         Theme.CIRCLE_SQUARE: {
-            "name": "Kolko i Kwadrat",
+            "name": "Circle & Square",
             "icon1": "circle.png",
             "icon2": "square.png",
             "icon1_fallback": "white_circle",
             "icon2_fallback": "black_square",
-            "description": "Geometryczny zestaw",
+            "description": "Minimal geometric set",
         },
         Theme.APPLE_ORANGE: {
-            "name": "Jablko i Pomarancza",
+            "name": "Apple & Orange",
             "icon1": "apple.png",
             "icon2": "orange.png",
             "icon1_fallback": "red_circle",
             "icon2_fallback": "orange_circle",
-            "description": "Owocowy wariant",
+            "description": "Fruit inspired icons",
         },
     }
 
@@ -140,8 +135,6 @@ class GameConfig:
 
 
 class GameSettings:
-    """Przechowuje wybrane ustawienia rozgrywki."""
-
     def __init__(
         self,
         difficulty: Difficulty = GameConfig.DEFAULT_DIFFICULTY,
