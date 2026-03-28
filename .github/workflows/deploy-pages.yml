@@ -21,6 +21,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -29,13 +32,15 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install pygame-ce pygbag
+          python -m pip install pygame-ce "pygbag==0.9.3"
 
       - name: Build web bundle with pygbag
         run: |
           python -m pygbag --build .
           test -d build/web
           touch build/web/.nojekyll
+          ls -la build
+          ls -la build/web
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
