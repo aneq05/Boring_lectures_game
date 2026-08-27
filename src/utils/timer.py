@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import time
 
-
 class GameTimer:
     def __init__(self):
         self._started_at: float | None = None

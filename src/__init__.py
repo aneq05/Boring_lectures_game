@@ -1,5 +1,3 @@
-"""Core package for the Let Me Tango game."""
-
 __version__ = "0.1.0"
 __author__ = "Your Name"
 __title__ = "Let Me Tango"

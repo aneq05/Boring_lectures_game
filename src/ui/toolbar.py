@@ -1,6 +1,3 @@
-"""
-Toolbar for gameplay actions.
-"""
 from __future__ import annotations
 
 import pygame
@@ -9,8 +6,6 @@ from src.ui.style import AppStyle
 
 
 class ToolbarButton:
-    """Single rounded toolbar action."""
-
     def __init__(self, rect: pygame.Rect, label: str, action: str):
         self.rect = rect
         self.label = label
@@ -20,8 +15,6 @@ class ToolbarButton:
 
 
 class Toolbar:
-    """Renders and handles gameplay action buttons."""
-
     def __init__(self, settings):
         self.settings = settings
         self.font = AppStyle.font(25, bold=True)

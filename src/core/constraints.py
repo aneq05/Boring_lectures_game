@@ -12,7 +12,6 @@ class Constraint:
         self.constraint_type = constraint_type
 
     def is_satisfied(self, board):
-        """Check if the constraint is satisfied on the given board."""
         state1 = board.get_cell_state(self.cell1).state
         state2 = board.get_cell_state(self.cell2).state
 

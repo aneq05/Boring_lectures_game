@@ -40,9 +40,55 @@ python main.py
 
 ## Tests
 
-```bash
-python -m pytest -q
+Test suite contains **87 tests** organized in two categories:
+
+### Test Structure
+
 ```
+tests/
+├── sct/                    # System/Component Tests (9 tests)
+│   └── test_gameplay_core.py - Integration tests for board generation, gameplay, and solver
+├── ut/                     # Unit Tests (78 tests)
+│   ├── board/              - Board logic, generation, cell manipulation
+│   ├── cell/               - Cell state management and toggling
+│   ├── core/               - Constraints, validator, solver algorithms
+│   ├── ui/                 - UI components rendering and styling
+│   ├── utils/              - Utilities (timer, move history, colors)
+│   ├── test_config.py      - GameSettings and configuration logic
+│   └── test_game_manager.py - Main game manager
+```
+
+### Running Tests
+
+**All tests:**
+```bash
+python -m pytest tests/ -q
+```
+
+**Unit tests only:**
+```bash
+python -m pytest tests/ut/ -v
+```
+
+**System/Component tests only:**
+```bash
+python -m pytest tests/sct/ -v
+```
+
+**Specific test file:**
+```bash
+python -m pytest tests/ut/board/test_board.py -v
+```
+
+**Coverage report:**
+```bash
+python -m pytest tests/ --cov=src
+```
+
+### Test Categories
+
+- **SCT (System Component Tests)**: Integration tests verifying board generation pipeline, gameplay interactions, and solver functionality with real constraints
+- **UT (Unit Tests)**: Isolated tests for individual modules and classes without external dependencies
 
 ## Deploy to GitHub Pages
 

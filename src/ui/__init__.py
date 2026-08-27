@@ -1,5 +1,3 @@
-"""UI package."""
-
 from .toolbar import Toolbar
 from .win_popup import WinPopup
 

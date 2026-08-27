@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class CellState(Enum):
     EMPTY = 0
     SUN = 1

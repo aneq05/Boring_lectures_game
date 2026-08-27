@@ -1,14 +1,9 @@
-"""
-Shared UI style helpers for a softer, modern look.
-"""
 from __future__ import annotations
 
 import pygame
 
 
 class AppStyle:
-    """Central style tokens and drawing helpers."""
-
     BG_TOP = (255, 235, 244)
     BG_BOTTOM = (255, 251, 243)
     DECORATION = (255, 215, 229)
@@ -26,7 +21,6 @@ class AppStyle:
 
     @staticmethod
     def font(size: int, bold: bool = False, italic: bool = False) -> pygame.font.Font:
-        """Creates a consistent system font."""
         return pygame.font.SysFont("Segoe UI", size, bold=bold, italic=italic)
 
     @staticmethod
@@ -35,7 +29,6 @@ class AppStyle:
         top_color: tuple[int, int, int],
         bottom_color: tuple[int, int, int],
     ):
-        """Paints a soft vertical gradient background."""
         width, height = surface.get_size()
         for y in range(height):
             t = y / max(1, height - 1)
@@ -55,7 +48,6 @@ class AppStyle:
         radius: int,
         shadow_offset: int = 5,
     ):
-        """Draws a rounded card with a subtle shadow."""
         shadow_rect = rect.move(0, shadow_offset)
         pygame.draw.rect(surface, AppStyle.SHADOW, shadow_rect, border_radius=radius)
         pygame.draw.rect(surface, color, rect, border_radius=radius)
